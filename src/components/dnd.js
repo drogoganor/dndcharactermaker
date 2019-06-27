@@ -2161,11 +2161,9 @@ export default {
         initiative: 0,
         proficiencyBonus: 2,
         languageids: [0, 1],
-        languages: '',
         armorClass: 10,
         proficiencies: [6, 14],
         toolProficiencies: [],
-        toolProficienciesText: '',
         equipment: [
           { id: 66, num: 1, },
           { id: 67, num: 1, },
@@ -2180,16 +2178,11 @@ export default {
           { id: 0, chosen: false, selection: 0, remaining: 1, items: [] },
           { id: 1, chosen: false, selection: 0, remaining: 1, items: [] },
         ],
-        equipmentText: '',
         currency: [0, 0, 0, 15, 0],
         traits: [0],
-        traitText: '',
         ideals: [0],
-        idealText: '',
         bonds: [0],
-        bondText: '',
         flaws: [0],
-        flawText: '',
         weaponModel: [],
       }
     }
@@ -2461,7 +2454,6 @@ export default {
       this.output.background = bg.text;
       this.output.backgroundid = bg.id;
       this.output.toolProficiencies = this.backgroundToolProficiencies[bg.id].profs.slice();
-      this.output.toolProficienciesText = this.toolProficienciesText;
       this.output.currency = this.backgroundCurrency[this.output.backgroundid].currency.slice();
 
       this.resetEquipment();
@@ -2703,14 +2695,6 @@ export default {
     },
     generate: function () {
 
-      this.output.languages = this.languagesText;
-
-      // TODO: Currently hardcoded
-      this.output.traitText = this.traitText;
-      this.output.idealText = this.idealText;
-      this.output.bondText = this.bondText;
-      this.output.flawText = this.flawText;
-
       // Initiative: DEX modifier
       this.output.initiative = this.output.statModifiers[1];
 
@@ -2722,8 +2706,6 @@ export default {
       this.output.level = this.level;
 
       this.output.proficiencyBonus = this.proficiencyLevels[this.output.level - 1].bonus;
-
-      this.output.equipmentText = this.equipmentText;
 
       this.buildWeaponModel();
 
@@ -2766,6 +2748,196 @@ export default {
 
       fields['XP'] = [o.xp];
 
+      fields['STR'] = [this.formatModifier(o.statModifiers[0])];
+      fields['DEX'] = [this.formatModifier(o.statModifiers[1])];
+      fields['CON'] = [this.formatModifier(o.statModifiers[2])];
+      fields['INT'] = [this.formatModifier(o.statModifiers[3])];
+      fields['WIS'] = [this.formatModifier(o.statModifiers[4])];
+      fields['CHA'] = [this.formatModifier(o.statModifiers[5])];
+
+      fields['STRmod'] = [o.finalStats[0]];
+      fields['DEXmod '] = [o.finalStats[1]];
+      fields['CONmod'] = [o.finalStats[2]];
+      fields['INTmod'] = [o.finalStats[3]];
+      fields['WISmod'] = [o.finalStats[4]];
+      fields['CHamod'] = [o.finalStats[5]];
+      
+      fields['HPMax'] = [o.hp];
+      fields['Speed'] = [o.speed];
+      fields['Initiative'] = [this.formatModifier(o.initiative)];
+
+      fields['ST Strength'] = [this.formatModifier(o.savingThrows[0])];
+      fields['ST Dexterity'] = [this.formatModifier(o.savingThrows[1])];
+      fields['ST Constitution'] = [this.formatModifier(o.savingThrows[2])];
+      fields['ST Intelligence'] = [this.formatModifier(o.savingThrows[3])];
+      fields['ST Wisdom'] = [this.formatModifier(o.savingThrows[4])];
+      fields['ST Charisma'] = [this.formatModifier(o.savingThrows[5])];
+
+      var i;
+      for (i = 0; i < 2; i++) {
+        var savingThrowStat = o.classStatSavingThrows[i];
+        switch(savingThrowStat) {
+          case 0:
+            fields['Check Box 11'] = [true];
+            break;
+          case 1:
+            fields['Check Box 18'] = [true];
+            break;
+          case 2:
+            fields['Check Box 19'] = [true];
+            break;
+          case 3:
+            fields['Check Box 20'] = [true];
+            break;
+          case 4:
+            fields['Check Box 21'] = [true];
+            break;
+          case 5:
+            fields['Check Box 22'] = [true];
+            break;
+          default:
+            break;
+        }
+      }
+
+      fields['HDTotal'] = [o.hitDice];
+      fields['ProfBonus'] = [o.proficiencyBonus];
+
+      var profLangText = 'Languages: ' + this.languagesText;
+      if (this.toolProficienciesText !== '')
+        profLangText += '\n\nProficiencies: ' + this.toolProficienciesText;
+      fields['ProficienciesLang'] = [profLangText];
+
+      fields['AC'] = [o.armorClass];
+      fields['Equipment'] = [this.equipmentText];
+
+      //fields['CP'] = [o.currency[0]];
+      //fields['SP'] = [o.currency[1]];
+      //fields['EP'] = [o.currency[2]];
+      fields['GP'] = [o.currency[3]];
+      //fields['PP'] = [o.currency[4]];
+
+      fields['PersonalityTraits '] = [this.traitText];
+      fields['Ideals'] = [this.idealText];
+      fields['Bonds'] = [this.bondText];
+      fields['Flaws'] = [this.flawText];
+
+      // https://rpg.stackexchange.com/questions/101169/how-does-passive-perception-work
+      var pp = 10 + o.statModifiers[4];
+      if (o.proficiencies.includes(11))
+        pp += o.proficiencyBonus;
+
+      fields['Passive'] = [pp];
+
+      fields['Acrobatics'] = [this.formatModifier(o.statModifiers[1] + (o.proficiencies.includes(0) ? o.proficiencyBonus : 0))];
+      fields['Animal'] = [this.formatModifier(o.statModifiers[4] + (o.proficiencies.includes(1) ? o.proficiencyBonus : 0))];
+      fields['Arcana'] = [this.formatModifier(o.statModifiers[3] + (o.proficiencies.includes(2) ? o.proficiencyBonus : 0))];
+      fields['Athletics'] = [this.formatModifier(o.statModifiers[0] + (o.proficiencies.includes(3) ? o.proficiencyBonus : 0))];
+      fields['Deception '] = [this.formatModifier(o.statModifiers[5] + (o.proficiencies.includes(4) ? o.proficiencyBonus : 0))];
+      fields['History '] = [this.formatModifier(o.statModifiers[3] + (o.proficiencies.includes(5) ? o.proficiencyBonus : 0))];
+      fields['Insight'] = [this.formatModifier(o.statModifiers[4] + (o.proficiencies.includes(6) ? o.proficiencyBonus : 0))];
+      fields['Intimidation'] = [this.formatModifier(o.statModifiers[5] + (o.proficiencies.includes(7) ? o.proficiencyBonus : 0))];
+      fields['Investigation '] = [this.formatModifier(o.statModifiers[3] + (o.proficiencies.includes(8) ? o.proficiencyBonus : 0))];
+      fields['Medicine'] = [this.formatModifier(o.statModifiers[4] + (o.proficiencies.includes(9) ? o.proficiencyBonus : 0))];
+      fields['Nature'] = [this.formatModifier(o.statModifiers[3] + (o.proficiencies.includes(10) ? o.proficiencyBonus : 0))];
+      fields['Perception '] = [this.formatModifier(o.statModifiers[4] + (o.proficiencies.includes(11) ? o.proficiencyBonus : 0))];
+      fields['Performance'] = [this.formatModifier(o.statModifiers[5] + (o.proficiencies.includes(12) ? o.proficiencyBonus : 0))];
+      fields['Persuasion'] = [this.formatModifier(o.statModifiers[5] + (o.proficiencies.includes(13) ? o.proficiencyBonus : 0))];
+      fields['Religion'] = [this.formatModifier(o.statModifiers[3] + (o.proficiencies.includes(14) ? o.proficiencyBonus : 0))];
+      fields['SleightofHand'] = [this.formatModifier(o.statModifiers[1] + (o.proficiencies.includes(15) ? o.proficiencyBonus : 0))];
+      fields['Stealth '] = [this.formatModifier(o.statModifiers[1] + (o.proficiencies.includes(16) ? o.proficiencyBonus : 0))];
+      fields['Survival'] = [this.formatModifier(o.statModifiers[4] + (o.proficiencies.includes(17) ? o.proficiencyBonus : 0))];
+
+      // Proficiencies
+      for (i = 0; i < o.proficiencies.length; i++) {
+        var prof = o.proficiencies[i];
+        switch(prof) {
+          case 0:
+            fields['Check Box 23'] = [true];
+            break;
+          case 1:
+            fields['Check Box 24'] = [true];
+            break;
+          case 2:
+            fields['Check Box 25'] = [true];
+            break;
+          case 3:
+            fields['Check Box 26'] = [true];
+            break;
+          case 4:
+            fields['Check Box 27'] = [true];
+            break;
+          case 5:
+            fields['Check Box 28'] = [true];
+            break;
+          case 6:
+            fields['Check Box 29'] = [true];
+            break;
+          case 7:
+            fields['Check Box 30'] = [true];
+            break;
+          case 8:
+            fields['Check Box 31'] = [true];
+            break;
+          case 9:
+            fields['Check Box 32'] = [true];
+            break;
+          case 10:
+            fields['Check Box 33'] = [true];
+            break;
+          case 11:
+            fields['Check Box 34'] = [true];
+            break;
+          case 12:
+            fields['Check Box 35'] = [true];
+            break;
+          case 13:
+            fields['Check Box 36'] = [true];
+            break;
+          case 14:
+            fields['Check Box 37'] = [true];
+            break;
+          case 15:
+            fields['Check Box 38'] = [true];
+            break;
+          case 16:
+            fields['Check Box 39'] = [true];
+            break;
+          case 17:
+            fields['Check Box 40'] = [true];
+            break;
+          default:
+            break;
+        }
+      }
+      
+      // Weapons
+      for (i = 0; i < o.weaponModel.length; i++) {
+        var weap = o.weaponModel[i];
+        var weapAtkBonusStr = this.formatModifier(weap.atkBonus);
+        var weapDmgStr = weap.dice + (weap.dmgBonus != 0 ? ' ' + this.formatModifier(weap.dmgBonus) : '') + ' ' + weap.dmgType;
+
+        switch(i) {
+          case 0:
+            fields['Wpn Name'] = [weap.name];
+            fields['Wpn1 AtkBonus'] = [weapAtkBonusStr];
+            fields['Wpn1 Damage'] = [weapDmgStr];
+            break;
+          case 1:
+              fields['Wpn Name 2'] = [weap.name];
+              fields['Wpn2 AtkBonus '] = [weapAtkBonusStr];
+              fields['Wpn2 Damage '] = [weapDmgStr];
+            break;
+          case 2:
+              fields['Wpn Name 3'] = [weap.name];
+              fields['Wpn3 AtkBonus  '] = [weapAtkBonusStr];
+              fields['Wpn3 Damage '] = [weapDmgStr];
+            break;
+          default:
+            break;
+        }
+      }
+
       var filledPdf = pdfform().transform(blob, fields);
       var outBlob = new Blob([filledPdf], {type: 'application/pdf'});
       var fileName = 'DnD5e - Lvl' + this.level + ' ' + this.output.race + ' ' + this.output.class;
@@ -2773,6 +2945,14 @@ export default {
         fileName += ' ' + this.output.playerName;
 
       saveAs(outBlob, fileName + '.pdf');
+    },
+    formatModifier: function(x) {
+      if (this.isInt(x)) {
+        if (x > 0)
+          return '+' + x;
+        return x;
+      }
+      return 0;
     }
   }
 }
