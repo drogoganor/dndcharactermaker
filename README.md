@@ -2,6 +2,8 @@
 
 A WIP character sheet maker for D&D 5e. Generates a [5e character sheet](https://dnd.wizards.com/articles/features/character_sheets) PDF with fields filled out.
 
+Live demo available [here](https://drogoganor.net/).
+
 It's very limited in scope so far. Numerous features are not implemented, including:
 
 * Character levels beyond 1
