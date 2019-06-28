@@ -18,6 +18,8 @@
             <ul>
               <li>Everything from Sword Coast Adventurer's Guide and Xanathar's Guide to Everything</li>
               <li>Levels above 1 (no calculation of hit points, proficiency bonus, and extra features)</li>
+              <li>Armor class does not include equipped armor or shield!</li>
+              <li>Many race &amp; subrace skills, proficiencies, and features are missing (stat bonuses, speed, &amp; languages are implemented)</li>
               <li>Class features &amp; traits</li>
               <li>Personality traits, ideals, bonds &amp; flaws selection</li>
               <li>Cantrips and spells</li>
@@ -44,11 +46,11 @@
       </div>
       <div class='columns field'>
         <label class='column is-2 label'>Character Name:</label>
-        <input class='input column is-4' id="charname" type="text" placeholder="Your character's name" v-model="output.characterName">
+        <input class='input column is-5' id="charname" type="text" :placeholder="raceNamePageReferenceText" v-model="output.characterName">
       </div>
       <div class='columns field'>
         <label class='column is-2 label'>Player Name:</label>
-        <input class='input column is-4' id="playername" type="text" placeholder="Your name" v-model="output.playerName">
+        <input class='input column is-5' id="playername" type="text" placeholder="Your name" v-model="output.playerName">
       </div>
       <div class='field'>
         <label class='label'>Race:</label>
@@ -376,6 +378,17 @@ export default {
         { id: 16, raceid: 7, text: 'Half-Orc' },
         { id: 17, raceid: 8, text: 'Tiefling' },
       ],
+      raceNamePageReferences: [
+        { raceid: 0, page: '20' },
+        { raceid: 1, page: '22' },
+        { raceid: 2, page: '27' },
+        { raceid: 3, page: '30' },
+        { raceid: 4, page: '33' },
+        { raceid: 5, page: '36' },
+        { raceid: 6, page: '22 and 30' },
+        { raceid: 7, page: '41' },
+        { raceid: 8, page: '43' },
+      ],
       classes: [
         { id: 0, text: 'Barbarian' },
         { id: 1, text: 'Bard' },
@@ -389,6 +402,89 @@ export default {
         { id: 9, text: 'Sorcerer' },
         { id: 10, text: 'Warlock' },
         { id: 11, text: 'Wizard' },
+      ],
+      classFeatures: [
+        {
+          id: 0, // Barbarian
+          features: [
+            { level: 1, text: 'Rage (p.48)' },
+            { level: 1, text: 'Unarmored Defense (p.48)' },
+            //{ level: 2, text: 'Reckless Attack (p.48)' },
+            // TODO: Features above level 1
+          ],
+        },
+        {
+          id: 1, // Bard
+          features: [
+            { level: 1, text: 'Bardic Inspiration (p.53)' },
+          ],
+        },
+        {
+          id: 2, // Cleric
+          features: [
+            { level: 1, text: 'Divine Domain (p.58)' },
+          ],
+        },
+        {
+          id: 3, // Druid
+          features: [
+            { level: 1, text: 'Druidic (p.66)' },
+          ],
+        },
+        {
+          id: 4, // Fighter
+          features: [
+            { level: 1, text: 'Fighting Style (p.72)' },
+            { level: 1, text: 'Second Wind (p.72)' },
+          ],
+        },
+        {
+          id: 5, // Monk
+          features: [
+            { level: 1, text: 'Unarmored Defense (p.78)' },
+            { level: 1, text: 'Martial Arts (p.78)' },
+          ],
+        },
+        {
+          id: 6, // Paladin
+          features: [
+            { level: 1, text: 'Divine Sense (p.84)' },
+            { level: 1, text: 'Lay on Hands (p.84)' },
+          ],
+        },
+        {
+          id: 7, // Ranger
+          features: [
+            { level: 1, text: 'Favored Enemy (p.91)' },
+            { level: 1, text: 'Natural Explorer (p.91)' },
+          ],
+        },
+        {
+          id: 8, // Rogue
+          features: [
+            { level: 1, text: 'Expertise (p.96)' },
+            { level: 1, text: 'Sneak Attack (p.96)' },
+            { level: 1, text: 'Thieves\' Cant (p.96)' },
+          ],
+        },
+        {
+          id: 9, // Sorcerer
+          features: [
+            { level: 1, text: 'Sorcerous Origin (p.101)' },
+          ],
+        },
+        {
+          id: 10, // Warlock
+          features: [
+            { level: 1, text: 'Otherworldly Patron (p.107)' },
+          ],
+        },
+        {
+          id: 11, // Wizard
+          features: [
+            { level: 1, text: 'Arcane Recovery (p.115)' },
+          ],
+        },
       ],
       armorCategories: [
         { id: 0, text: 'Light Armor' },
@@ -2116,6 +2212,21 @@ export default {
         { id: 11, text: 'Soldier' },
         { id: 12, text: 'Urchin' },
       ],
+      backgroundFeatures: [
+        { id: 0, text: 'Shelter of the Faithful (p.127)' },
+        { id: 1, text: 'False Identity (p.128)' },
+        { id: 2, text: 'Criminal Contact (p.129)' },
+        { id: 3, text: 'By Popular Demand (p.130)' },
+        { id: 4, text: 'Rustic Hospitality (p.131)' },
+        { id: 5, text: 'Guild Membership (p.133)' },
+        { id: 6, text: 'Discovery (p.134)' },
+        { id: 7, text: 'Position of Privilege (p.135)' },
+        { id: 8, text: 'Wanderer (p.136)' },
+        { id: 9, text: 'Researcher (p.138)' },
+        { id: 10, text: 'Ship\'s Passage (p.139)' },
+        { id: 11, text: 'Military Rank (p.140)' },
+        { id: 12, text: 'City Secrets (p.141)' },
+      ],
       backgroundCurrency: [
         { id: 0, currency: [0, 0, 0, 15, 0] }, /* CP, SP, EP, GP, PP */
         { id: 1, currency: [0, 0, 0, 15, 0] },
@@ -2873,6 +2984,22 @@ export default {
     currentStatAssignmentText: function () {
       return this.statBlocks[this.statAssignmentIndex].text;
     },
+    traitsAndFeatures: function () {
+      var result = [];
+      var backgroundFeature = this.backgroundFeatures[this.output.backgroundid];
+      result.push(backgroundFeature.text);
+
+      var classFeatures = this.classFeatures[this.output.classid];
+      var i;
+      for (i = 0; i < classFeatures.features.length; i++) {
+        var classFeature = classFeatures.features[i];
+        if (classFeature.level <= this.level) {
+          result.push(classFeature.text);
+        }
+      }
+
+      return result;
+    },
     equipmentText: function () {
       // Nice text of selected equipment
       var i;
@@ -2972,6 +3099,12 @@ export default {
       if (this.output.currency[4] > 0)
         text += this.output.currency[4] + " PP ";
       return text;
+    },
+    raceNamePageReferenceText: function () {
+      var race = this.races[this.output.raceid];
+      var baseRaceName = this.races.find(rn => rn.raceid === race.raceid).text;
+      var racePageRef = this.raceNamePageReferences.find(rn => rn.raceid === race.raceid);
+      return 'Example ' + baseRaceName + ' names can be found on page ' + racePageRef.page;
     },
     traitText: function () {
       return this.personalityTraits[this.output.traits[0]].text;
@@ -3385,7 +3518,7 @@ export default {
       // Initiative: DEX modifier
       this.output.initiative = this.output.statModifiers[1];
 
-      // Base armor class: 10 + DEX modifier (does not include shield or armor)
+      // Base armor class: 10 + DEX modifier (TODO: include shield & armor)
       this.output.armorClass = 10 + this.output.statModifiers[1];
 
       // HP: Starting HP + CON
@@ -3440,6 +3573,8 @@ export default {
       fields['Feat+Traits'] = [o.additionalFeaturesAndTraits];
       fields['Backstory'] = [o.backstory];
       fields['Treasure'] = [o.treasure];
+
+      fields['Features and Traits'] = [this.traitsAndFeatures.join('\n\n')];
 
       if (o.appearance !== null) {
         fields['CHARACTER IMAGE'] = [o.appearance];
