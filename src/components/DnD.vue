@@ -2,15 +2,31 @@
   <div class='bd-main-container container'>
     <div class='content'>
       <div class='title'>D&amp;D 5e Character Sheet Maker</div>
-      <div class='box'>
-        This tool will generate a pre-filled
-        <a href="https://dnd.wizards.com/articles/features/character_sheets">D&amp;D 5e character sheet</a> in PDF format. You'll need a
-        <a href="https://dnd.wizards.com/products/tabletop-games/rpg-products/rpg_playershandbook">Player's Handbook</a> to fill out some details from page number references.
-      </div>
-      <div class="box">
-        This is a WIP. Numerous features are incomplete or missing. Please see the
-        <a href="https://github.com/drogoganor/dndcharactermaker" class="alert-link">GitHub page</a> for more details or to report issues.
-      </div>
+      <article class='message'>
+        <div class='message-header'>
+          This is a work-in-progress. Many features are missing.
+        </div>
+        <div class="message-body media-content content">
+          <p>
+            This tool will generate a pre-filled
+            <a href="https://dnd.wizards.com/articles/features/character_sheets">D&amp;D 5e character sheet</a> in PDF format. You'll need a
+            <a href="https://dnd.wizards.com/products/tabletop-games/rpg-products/rpg_playershandbook">Player's Handbook</a> to fill out some details from page number references. Please see the
+            <a href="https://github.com/drogoganor/dndcharactermaker">GitHub page</a> for more details or to report issues.
+          </p>
+          <p>
+            Missing features list:
+            <ul>
+              <li>Everything from Sword Coast Adventurer's Guide and Xanathar's Guide to Everything</li>
+              <li>Levels above 1 (no calculation of hit points, proficiency bonus, and extra features)</li>
+              <li>Class features &amp; traits</li>
+              <li>Personality traits, ideals, bonds &amp; flaws selection</li>
+              <li>Listing of backpack contents</li>
+              <li>Cantrips and spells</li>
+              <li>Character appearance &amp; faction logo</li>
+            </ul>
+          </p>
+        </div>
+      </article>
     </div>
     <div class='content has-text-left'>
       <div class='columns field'>
@@ -218,6 +234,75 @@
             </div>
           </div>
         </div>
+      </div>
+      
+      <div class='field'>
+        <label class='label'>Personality Traits:</label>
+        <input class='input' id="personalityTraits" type="text" v-model="output.personalityTraitsText">
+      </div>
+      <div class='field'>
+        <label class='label'>Ideals:</label>
+        <input class='input' id="ideals" type="text" v-model="output.idealsText">
+      </div>
+      <div class='field'>
+        <label class='label'>Bonds:</label>
+        <input class='input' id="bonds" type="text" v-model="output.bondsText">
+      </div>
+      <div class='field'>
+        <label class='label'>Flaws:</label>
+        <input class='input' id="flaws" type="text" v-model="output.flawsText">
+      </div>
+      <div class='field'>
+        <label class='label'>Age:</label>
+        <input class='input' id="age" type="text" v-model="output.age">
+      </div>
+      <div class='field'>
+        <label class='label'>Height:</label>
+        <input class='input' id="height" type="text" v-model="output.height">
+      </div>
+      <div class='field'>
+        <label class='label'>Weight:</label>
+        <input class='input' id="weight" type="text" v-model="output.weight">
+      </div>
+      <div class='field'>
+        <label class='label'>Eyes:</label>
+        <input class='input' id="eyes" type="text" v-model="output.eyes">
+      </div>
+      <div class='field'>
+        <label class='label'>Skin:</label>
+        <input class='input' id="skin" type="text" v-model="output.skin">
+      </div>
+      <div class='field'>
+        <label class='label'>Hair:</label>
+        <input class='input' id="hair" type="text" v-model="output.hair">
+      </div>
+      <div class='field'>
+        <label class='label'>Appearance (not implemented yet):</label>
+        <input class='input' id="appearance" type="file" accept="image/*" disabled='disabled' v-on:change="setAppearance">
+      </div>
+      <div class='field'>
+        <label class='label'>Organization/Faction:</label>
+        <input class='input' id="organizations" type="text" v-model="output.organizations">
+      </div>
+      <div class='field'>
+        <label class='label'>Faction Logo (not implemented yet):</label>
+        <input class='input' id="factionLogo" type="file" accept="image/*" disabled='disabled' v-on:change="setFactionLogo">
+      </div>
+      <div class='field'>
+        <label class='label'>Allies:</label>
+        <input class='input' id="allies" type="text" v-model="output.allies">
+      </div>
+      <div class='field'>
+        <label class='label'>Backstory:</label>
+        <textarea class="textarea" rows='5' id="backstory" v-model="output.backstory" placeholder="Enter your character's backstory"></textArea>
+      </div>
+      <div class='field'>
+        <label class='label'>Additional Features &amp; Traits:</label>
+        <input class='input' id="additionalFeaturesAndTraits" type="text" v-model="output.additionalFeaturesAndTraits">
+      </div>
+      <div class='field'>
+        <label class='label'>Treasure:</label>
+        <input class='input' id="treasure" type="text" v-model="output.treasure">
       </div>
 
       <div id="finish">
@@ -2422,10 +2507,27 @@ export default {
         ],
         currency: [0, 0, 0, 15, 0],
         traits: [0],
+        personalityTraitsText: '',
         ideals: [0],
+        idealsText: '',
         bonds: [0],
+        bondsText: '',
         flaws: [0],
+        flawsText: '',
         weaponModel: [],
+        age: '20',
+        height: '6\'1',
+        weight: '170lbs',
+        eyes: 'Blue',
+        skin: 'Fair',
+        hair: 'Black',
+        appearance: null,
+        factionLogo: null,
+        organizations: '',
+        allies: '',
+        backstory: '',
+        treasure: '',
+        additionalFeaturesAndTraits: ''
       }
     }
   },
@@ -2787,6 +2889,12 @@ export default {
     addProficiency: function (id) {
       this.output.proficiencies.push(id);
     },
+    setAppearance: function (image) {
+      this.output.appearance = image.srcElement.files[0];
+    },
+    setFactionLogo: function (image) {
+      this.output.factionLogo = image.srcElement.files[0];
+    },
     selectEquipment: function (categoryId, choiceId, equipId) {
       var choiceCategory = this.output.equipChoices[categoryId];
       var equipModel = this.classEquipment[this.output.classid].equipChoices[categoryId];
@@ -2989,9 +3097,29 @@ export default {
       var o = this.output;
       fields['PlayerName'] = [o.playerName];
       fields['CharacterName'] = [o.characterName];
+      fields['CharacterName 2'] = [o.characterName];
       fields['ClassLevel'] = [o.class + ' ' + this.level];
       fields['Race '] = [o.race];
       fields['Background'] = [o.background];
+
+      fields['Age'] = [o.age];
+      fields['Height'] = [o.height];
+      fields['Weight'] = [o.weight];
+      fields['Eyes'] = [o.eyes];
+      fields['Skin'] = [o.skin];
+      fields['Hair'] = [o.hair];
+      fields['Allies'] = [o.allies];
+      fields['FactionName'] = [o.organizations];
+      fields['Feat+Traits'] = [o.additionalFeaturesAndTraits];
+      fields['Backstory'] = [o.backstory];
+      fields['Treasure'] = [o.treasure];
+
+      if (o.appearance !== null) {
+        fields['CHARACTER IMAGE'] = [o.appearance];
+      }
+      if (o.factionLogo !== null) {
+        fields['Faction Symbol Image'] = [o.factionLogo];
+      }
 
       var niceAlignment = o.alignmentLawChaos + ' ' + o.alignmentGoodEvil;
       if (niceAlignment === 'Neutral Neutral')
@@ -3063,16 +3191,17 @@ export default {
       fields['AC'] = [o.armorClass];
       fields['Equipment'] = [this.equipmentText];
 
+      // Only an amount of gold
       //fields['CP'] = [o.currency[0]];
       //fields['SP'] = [o.currency[1]];
       //fields['EP'] = [o.currency[2]];
       fields['GP'] = [o.currency[3]];
       //fields['PP'] = [o.currency[4]];
 
-      fields['PersonalityTraits '] = [this.traitText];
-      fields['Ideals'] = [this.idealText];
-      fields['Bonds'] = [this.bondText];
-      fields['Flaws'] = [this.flawText];
+      fields['PersonalityTraits '] = [o.personalityTraitsText];
+      fields['Ideals'] = [o.idealsText];
+      fields['Bonds'] = [o.bondsText];
+      fields['Flaws'] = [o.flawsText];
 
       // https://rpg.stackexchange.com/questions/101169/how-does-passive-perception-work
       var pp = 10 + o.statModifiers[4];
@@ -3205,18 +3334,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
 </style>
