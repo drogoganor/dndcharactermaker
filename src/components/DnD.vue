@@ -20,9 +20,14 @@
               <li>Levels above 1 (no calculation of hit points, proficiency bonus, and extra features)</li>
               <li>Class features &amp; traits</li>
               <li>Personality traits, ideals, bonds &amp; flaws selection</li>
-              <li>Listing of backpack contents</li>
               <li>Cantrips and spells</li>
               <li>Character appearance &amp; faction logo</li>
+            </ul>
+          </p>
+          <p>
+            Known bugs and limitations:
+            <ul>
+              <li>The same item can be listed twice e.g. a Criminal Rogue with a Burglar's pack will have Crowbar listed twice instead of "Crowbar (2)"</li>
             </ul>
           </p>
         </div>
@@ -39,11 +44,11 @@
       </div>
       <div class='columns field'>
         <label class='column is-2 label'>Character Name:</label>
-        <input class='input column is-4' id="charname" type="text" v-model="output.characterName">
+        <input class='input column is-4' id="charname" type="text" placeholder="Your character's name" v-model="output.characterName">
       </div>
       <div class='columns field'>
         <label class='column is-2 label'>Player Name:</label>
-        <input class='input column is-4' id="playername" type="text" v-model="output.playerName">
+        <input class='input column is-4' id="playername" type="text" placeholder="Your name" v-model="output.playerName">
       </div>
       <div class='field'>
         <label class='label'>Race:</label>
@@ -191,7 +196,7 @@
         <label class='column is-2 label'>Equipment:</label>
         <div class='column tags are-small'>
           <div class='tags are-small'>
-            <span v-for="eq in equipmentTextList" v-bind:key="eq" class='tag is-dark'>{{ eq }}</span>
+            <span v-for="(eq, i) in equipmentTextList" v-bind:key="i" class='tag is-dark'>{{ eq }}</span>
           </div>
           <label class='label' v-if='!allEquipmentChosen'>Select Extra Equipment:</label>
           <div v-for="choices in equipmentChoiceModel" v-bind:key="choices.id">
@@ -1791,6 +1796,295 @@ export default {
           text: 'Spellbook',
           weapon: false,
         },
+        // Pack contents
+        {
+          id: 109,
+          type: 6,
+          text: 'Backpack',
+          weapon: false
+        },
+        {
+          id: 110,
+          type: 6,
+          text: 'Bedroll',
+          weapon: false
+        },
+        {
+          id: 111,
+          type: 6,
+          text: 'Mess kit',
+          weapon: false
+        },
+        {
+          id: 112,
+          type: 6,
+          text: 'Tinderbox',
+          weapon: false
+        },
+        {
+          id: 113,
+          type: 6,
+          text: 'Torch',
+          weapon: false
+        },
+        {
+          id: 114,
+          type: 6,
+          text: 'Rations',
+          weapon: false
+        },
+        {
+          id: 115,
+          type: 6,
+          text: 'Waterskin',
+          weapon: false
+        },
+        {
+          id: 116,
+          type: 6,
+          text: 'Chest',
+          weapon: false
+        },
+        {
+          id: 117,
+          type: 6,
+          text: 'Map/scroll case',
+          weapon: false
+        },
+        {
+          id: 118,
+          type: 6,
+          text: 'Ink pen',
+          weapon: false
+        },
+        {
+          id: 119,
+          type: 6,
+          text: 'Lamp',
+          weapon: false
+        },
+        {
+          id: 120,
+          type: 6,
+          text: 'Oil flask',
+          weapon: false
+        },
+        {
+          id: 121,
+          type: 6,
+          text: 'Sheet of paper',
+          weapon: false
+        },
+        {
+          id: 122,
+          type: 6,
+          text: 'Vial of perfume',
+          weapon: false
+        },
+        {
+          id: 123,
+          type: 6,
+          text: 'Sealing wax',
+          weapon: false
+        },
+        {
+          id: 124,
+          type: 6,
+          text: 'Soap',
+          weapon: false
+        },
+        {
+          id: 125,
+          type: 6,
+          text: 'Candle',
+          weapon: false
+        },
+        {
+          id: 126,
+          type: 6,
+          text: 'Blanket',
+          weapon: false
+        },
+        {
+          id: 127,
+          type: 6,
+          text: 'Alms box',
+          weapon: false
+        },
+        {
+          id: 128,
+          type: 6,
+          text: 'Block of incense',
+          weapon: false
+        },
+        {
+          id: 129,
+          type: 6,
+          text: 'Censer',
+          weapon: false
+        },
+        {
+          id: 130,
+          type: 6,
+          text: 'Hammer',
+          weapon: false
+        },
+        {
+          id: 131,
+          type: 6,
+          text: 'Piton',
+          weapon: false
+        },
+        {
+          id: 132,
+          type: 6,
+          text: 'Ball bearings',
+          weapon: false
+        },
+        {
+          id: 133,
+          type: 6,
+          text: 'String (10ft)',
+          weapon: false
+        },
+        {
+          id: 134,
+          type: 6,
+          text: 'Bell',
+          weapon: false
+        },
+        {
+          id: 135,
+          type: 6,
+          text: 'Hooded lantern',
+          weapon: false
+        },
+        {
+          id: 136,
+          type: 6,
+          text: 'Hempen rope (50ft)',
+          weapon: false
+        },
+        {
+          id: 137,
+          type: 6,
+          text: 'Book of lore',
+          weapon: false
+        },
+        {
+          id: 138,
+          type: 6,
+          text: 'Parchment sheet',
+          weapon: false
+        },
+        {
+          id: 139,
+          type: 6,
+          text: 'Small bag of sand',
+          weapon: false
+        },
+
+      ],
+      backpackContents: [
+        { 
+          id: 37, // Explorers pack
+          contents: [
+            { id: 109, num: 1 },
+            { id: 110, num: 1 },
+            { id: 111, num: 1 },
+            { id: 112, num: 1 },
+            { id: 113, num: 10 },
+            { id: 114, num: 10 },
+            { id: 115, num: 1 },
+          ],
+        },
+        { 
+          id: 38, // Diplomat pack
+          contents: [
+            { id: 116, num: 1 },
+            { id: 117, num: 2 },
+            { id: 72, num: 1 },
+            { id: 93, num: 1 }, // TODO: Bottle of ink, not necessarily black
+            { id: 118, num: 1 },
+            { id: 119, num: 1 },
+            { id: 120, num: 2 },
+            { id: 121, num: 5 },
+            { id: 122, num: 1 },
+            { id: 123, num: 1 },
+            { id: 124, num: 1 },
+          ],
+        },
+        { 
+          id: 39, // Entertainer pack
+          contents: [
+            { id: 109, num: 1 },
+            { id: 110, num: 1 },
+            { id: 78, num: 2 },
+            { id: 125, num: 5 },
+            { id: 114, num: 5 },
+            { id: 115, num: 1 },
+            { id: 73, num: 1 },
+          ],
+        },
+        { 
+          id: 40, // Priest pack
+          contents: [
+            { id: 109, num: 1 },
+            { id: 126, num: 1 },
+            { id: 125, num: 10 },
+            { id: 112, num: 1 },
+            { id: 127, num: 1 },
+            { id: 128, num: 2 },
+            { id: 129, num: 1 },
+            { id: 69, num: 1 },
+            { id: 114, num: 2 },
+            { id: 115, num: 1 },
+          ],
+        },
+        { 
+          id: 41, // Dungeoneer pack
+          contents: [
+            { id: 109, num: 1 },
+            { id: 75, num: 1 },
+            { id: 130, num: 1 },
+            { id: 131, num: 10 },
+            { id: 113, num: 10 },
+            { id: 112, num: 1 },
+            { id: 114, num: 10 },
+            { id: 115, num: 1 },
+          ],
+        },
+        { 
+          id: 42, // Burglar pack
+          contents: [
+            { id: 109, num: 1 },
+            { id: 132, num: 1000 },
+            { id: 133, num: 1 },
+            { id: 134, num: 1 },
+            { id: 125, num: 5 },
+            { id: 75, num: 1 },
+            { id: 130, num: 1 },
+            { id: 131, num: 10 },
+            { id: 135, num: 1 },
+            { id: 120, num: 2 },
+            { id: 114, num: 5 },
+            { id: 112, num: 1 },
+            { id: 115, num: 1 },
+            { id: 136, num: 1 },
+          ],
+        },
+        { 
+          id: 43, // Scholar pack
+          contents: [
+            { id: 109, num: 1 },
+            { id: 137, num: 1 },
+            { id: 93, num: 1 }, // TODO: Bottle of ink, not necessarily black
+            { id: 118, num: 1 },
+            { id: 138, num: 10 },
+            { id: 139, num: 1 },
+            { id: 95, num: 1 },
+          ],
+        },
       ],
       backgroundEquipment: [
         { id: 0, equipids: [66, 67, 68, 69, 70, 71] },
@@ -2616,7 +2910,11 @@ export default {
       var equipIds = [];
       for (i = 0; i < this.output.equipment.length; i++) {
         var thisEquip = this.output.equipment[i];
-        equipIds.push({ id: thisEquip.id, num: thisEquip.num });
+        if (!this.isPack(thisEquip.id)) {
+          equipIds.push({ id: thisEquip.id, num: thisEquip.num });
+        } else {
+          equipIds = equipIds.concat(this.getPackItems(thisEquip.id)); // Add pack items
+        }
       }
 
       for (i = 0; i < this.output.equipChoices.length; i++) {
@@ -2625,7 +2923,11 @@ export default {
           var e;
           for (e = 0; e < thisEquip.items.length; e++) {
             var item = thisEquip.items[e];
-            equipIds.push({ id: item.id, num: item.num });
+            if (!this.isPack(item.id)) {
+              equipIds.push({ id: item.id, num: item.num });
+            } else {
+              equipIds = equipIds.concat(this.getPackItems(item.id)); // Add pack items
+            }
           }
         }
       }
@@ -2762,6 +3064,31 @@ export default {
     }
   },
   methods: {
+    isPack: function (itemId) {
+      var equipDef = this.equipment[itemId];
+      if (equipDef.type !== 2)
+        return false;
+      return true;
+    },
+    getPackItems: function (packId) {
+      var packItems = [];
+
+      if (!this.isPack(packId))
+        return packItems;
+      
+      // Iterate and add pack equipment
+      var backpackItems = this.backpackContents.find(bp => bp.id === packId);
+      if (typeof backpackItems === 'undefined')
+        return packItems;
+
+      var i;
+      for (i = 0; i < backpackItems.contents.length; i++) {
+        var backpackItem = backpackItems.contents[i];
+        packItems.push({ id: backpackItem.id, num: backpackItem.num }); 
+      }
+      
+      return packItems;
+    },
     isInt: function (x) {
       var y = parseInt(x, 10);
       return !isNaN(y);
