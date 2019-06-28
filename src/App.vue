@@ -5,6 +5,8 @@
 </template>
 
 <script>
+// eslint-disable-next-line
+import pako from './pako'
 import DnD from './components/DnD.vue'
 
 export default {
