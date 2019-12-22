@@ -1,18 +1,12 @@
 # D&D 5e Character Sheet Maker
 
+Now obsolete, please see the new React version [here](https://github.com/drogoganor/dndcharactermaker-react).
+
 A WIP character sheet maker for D&D 5e. Generates a [5e character sheet](https://dnd.wizards.com/articles/features/character_sheets) PDF with fields filled out.
 
-Live demo available [here](https://drogoganor.net/).
+Live demo available [here](https://drogoganor.net/dnd-vue/).
 
-It's very limited in scope so far. Numerous features are not implemented, including:
-
-* Character levels beyond 1
-* More than one of the same item
-* Weapon atk and damage
-* Class features
-* Backpack equipment
-* Personality trait, ideals, bonds, and flaw selection/rolls
-* All page 2 & 3 fields, so spellcasting is not included yet
+It's very limited in scope so far. Numerous features are not implemented.
 
 I cannot guarantee all stat calculations are correct. You'll want to verify the numbers yourself. Your DM may be mad if you tell him you used this tool to create your character.
 
